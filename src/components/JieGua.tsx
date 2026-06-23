@@ -6,9 +6,10 @@ interface JieGuaProps {
   paiguaResult: PaiGuaResult;
   questionType: string;
   onBack: () => void;
+  onAiInterpretation: () => void;
 }
 
-export function JieGua({ paiguaResult, questionType, onBack }: JieGuaProps) {
+export function JieGua({ paiguaResult, questionType, onBack, onAiInterpretation }: JieGuaProps) {
   const result = jiehua(paiguaResult, questionType);
   
   const getTrendColor = (trend: string) => {
@@ -94,7 +95,7 @@ export function JieGua({ paiguaResult, questionType, onBack }: JieGuaProps) {
           
           <div className="text-center animate-slide-up">
             <button
-              onClick={() => {}}
+              onClick={onAiInterpretation}
               className="btn btn-accent"
             >
               获取AI解读

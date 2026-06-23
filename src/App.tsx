@@ -48,6 +48,10 @@ function App() {
     setCurrentStep('jiehua');
   };
 
+  const handleAiInterpretation = () => {
+    setCurrentStep('ai');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50">
       <div className="animate-fade-in">
@@ -75,6 +79,7 @@ function App() {
             paiguaResult={paiguaResult}
             questionType={selectedCategory.id}
             onBack={handleBackToPaiGua}
+            onAiInterpretation={handleAiInterpretation}
           />
         )}
         
