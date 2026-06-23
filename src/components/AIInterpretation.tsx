@@ -1,6 +1,8 @@
 // src/components/AIInterpretation.tsx
 import { useState } from 'react';
-import { PaiGuaResult } from '../types/paigua';
+import type { AIConfig, AIInterpretationRequest, AIInterpretationResponse } from '../types/ai';
+import type { PaiGuaResult } from '../types/paigua';
+import { interpretWithAI } from '../utils/ai';
 
 interface AIInterpretationProps {
   paiguaResult: PaiGuaResult;
@@ -10,32 +12,34 @@ interface AIInterpretationProps {
 }
 
 export function AIInterpretation({ paiguaResult, question, questionType, onBack }: AIInterpretationProps) {
+  const [config, setConfig] = useState<AIConfig>({
+    useMimoApi: false,
+    mimoApiKey: ''
+  });
+  
   const [isLoading, setIsLoading] = useState(false);
-  const [interpretation, setInterpretation] = useState('');
-
-  const generateInterpretation = async () => {
+  const [result, setResult] = useState<AIInterpretationResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  
+  const handleInterpret = async () => {
     setIsLoading(true);
-    setInterpretation('');
+    setError(null);
     
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setInterpretation(`
-      根据您的卦象分析：
+    try {
+      const request: AIInterpretationRequest = {
+        guaData: paiguaResult.guaData,
+        question,
+        questionType,
+        paiguaResult
+      };
       
-      问题：${question}
-      类型：${questionType}
-      
-      卦象显示，当前运势较为平稳。用神得力，预示着事情会向好的方向发展。
-      
-      建议：
-      1. 保持积极心态
-      2. 把握时机
-      3. 注意细节
-      
-      总体评分：75分（良好）
-    `);
-    
-    setIsLoading(false);
+      const response = await interpretWithAI(config, request);
+      setResult(response);
+    } catch (err) {
+      setError('解读失败，请稍后重试');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -67,47 +71,109 @@ export function AIInterpretation({ paiguaResult, question, questionType, onBack 
               </p>
             </div>
             
-            {!interpretation && !isLoading && (
-              <div className="text-center">
-                <button
-                  onClick={generateInterpretation}
-                  className="btn btn-primary"
-                >
-                  开始解读
-                </button>
+            <div className="space-y-4 mb-6">
+              <div
+                onClick={() => setConfig(prev => ({ ...prev, useMimoApi: false }))}
+                className={`
+                  p-4 rounded-lg cursor-pointer border-2 transition-all
+                  ${!config.useMimoApi
+                    ? 'border-primary-500 bg-primary-50'
+                    : 'border-neutral-200 hover:border-neutral-300'
+                  }
+                `}
+              >
+                <div className="flex items-center">
+                  <div className={`
+                    w-4 h-4 rounded-full border-2 mr-3
+                    ${!config.useMimoApi ? 'border-primary-500 bg-primary-500' : 'border-neutral-300'}
+                  `} />
+                  <div>
+                    <h3 className="font-semibold text-neutral-800">使用免费API</h3>
+                    <p className="text-sm text-neutral-600">无需配置，直接使用</p>
+                  </div>
+                </div>
               </div>
-            )}
-            
-            {isLoading && (
-              <div className="text-center py-8">
-                <div className="w-16 h-16 mx-auto mb-4 border-4 border-primary-200 border-t-primary-500 rounded-full animate-spin" />
-                <p className="text-neutral-600">AI正在分析您的卦象...</p>
-              </div>
-            )}
-            
-            {interpretation && (
-              <div className="animate-fade-in">
-                <div className="bg-neutral-50 rounded-lg p-6 whitespace-pre-wrap text-neutral-700">
-                  {interpretation}
+              
+              <div
+                onClick={() => setConfig(prev => ({ ...prev, useMimoApi: true }))}
+                className={`
+                  p-4 rounded-lg cursor-pointer border-2 transition-all
+                  ${config.useMimoApi
+                    ? 'border-primary-500 bg-primary-50'
+                    : 'border-neutral-200 hover:border-neutral-300'
+                  }
+                `}
+              >
+                <div className="flex items-center">
+                  <div className={`
+                    w-4 h-4 rounded-full border-2 mr-3
+                    ${config.useMimoApi ? 'border-primary-500 bg-primary-500' : 'border-neutral-300'}
+                  `} />
+                  <div>
+                    <h3 className="font-semibold text-neutral-800">使用MIMO API</h3>
+                    <p className="text-sm text-neutral-600">使用您自己的API密钥</p>
+                  </div>
                 </div>
                 
-                <div className="mt-6 text-center">
-                  <button
-                    onClick={generateInterpretation}
-                    className="btn btn-outline mr-4"
-                  >
-                    重新解读
-                  </button>
-                  <button
-                    onClick={onBack}
-                    className="btn btn-ghost"
-                  >
-                    返回
-                  </button>
-                </div>
+                {config.useMimoApi && (
+                  <div className="mt-4">
+                    <label className="label">
+                      API密钥
+                    </label>
+                    <input
+                      type="password"
+                      value={config.mimoApiKey}
+                      onChange={(e) => setConfig(prev => ({ ...prev, mimoApiKey: e.target.value }))}
+                      placeholder="请输入您的MIMO API密钥"
+                      className="input"
+                    />
+                  </div>
+                )}
               </div>
-            )}
+            </div>
+            
+            <button
+              onClick={handleInterpret}
+              disabled={isLoading || (config.useMimoApi && !config.mimoApiKey)}
+              className="btn btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? '解读中...' : '开始AI解读'}
+            </button>
           </div>
+          
+          {error && (
+            <div className="card mb-8 bg-red-50 border-red-200 animate-slide-up">
+              <p className="text-red-600">{error}</p>
+            </div>
+          )}
+          
+          {result && (
+            <div className="card animate-slide-up">
+              <h2 className="text-xl font-semibold text-neutral-800 mb-6 font-serif">
+                解读结果
+              </h2>
+              <div className="prose max-w-none">
+                <pre className="whitespace-pre-wrap text-neutral-600">{result.content}</pre>
+              </div>
+              
+              <div className="flex justify-end mt-6">
+                <button
+                  onClick={() => {
+                    const blob = new Blob([result.content], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `六爻解读_${new Date().toISOString().split('T')[0]}.txt`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                  }}
+                  className="btn btn-secondary"
+                >
+                  保存解读
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
