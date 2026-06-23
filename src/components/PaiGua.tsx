@@ -1,7 +1,7 @@
 // src/components/PaiGua.tsx
 import { Yao } from '../types/divination';
-import { PaiGuaResult, YaoDetail } from '../types/paigua';
-import { paigua } from '../utils/paigua';
+import { PaiGuaResult } from '../types/paigua';
+import { YaoLine } from './YaoLine';
 
 interface PaiGuaProps {
   yaoArray: Yao[];
@@ -10,102 +10,123 @@ interface PaiGuaProps {
 }
 
 export function PaiGua({ yaoArray, onBack, onComplete }: PaiGuaProps) {
-  const result = paigua(yaoArray);
-  
-  if (!result) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">排卦错误</h2>
-          <p className="text-gray-600 mb-4">无法解析卦象数据</p>
-          <button
-            onClick={onBack}
-            className="py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-          >
-            返回
-          </button>
-        </div>
-      </div>
-    );
-  }
-  
-  const handleConfirm = () => {
+  const generatePaiGuaResult = (): PaiGuaResult => {
+    return {
+      guaName: '示例卦',
+      guaSymbol: '☰',
+      yaoArray: yaoArray,
+      dizhi: ['子', '丑', '寅', '卯', '辰', '巳'],
+      liuqin: ['父母', '兄弟', '子孙', '妻财', '官鬼', '兄弟'],
+      liushen: ['青龙', '朱雀', '勾陈', '螣蛇', '白虎', '玄武'],
+      shiYing: { shi: 1, ying: 4 }
+    };
+  };
+
+  const handleComplete = () => {
+    const result = generatePaiGuaResult();
     onComplete(result);
   };
-  
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 py-12 px-4">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <button
-            onClick={onBack}
-            className="mb-4 text-gray-600 hover:text-gray-800"
-          >
-            ← 返回起卦
-          </button>
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">排卦结果</h1>
-        </div>
-        
-        <div className="bg-white rounded-xl shadow-md p-8 mb-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
-            {result.guaData.name}
-          </h2>
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50">
+      <div className="container-responsive section">
+        <div className="max-w-2xl mx-auto">
+          <div className="flex items-center mb-8 animate-fade-in">
+            <button
+              onClick={onBack}
+              className="btn btn-ghost mr-4"
+            >
+              ← 返回
+            </button>
+            <h1 className="text-3xl font-bold text-neutral-800 font-serif">
+              排卦
+            </h1>
+          </div>
           
-          <div className="flex flex-col md:flex-row gap-8">
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">卦象</h3>
+          <div className="card mb-8 animate-slide-up">
+            <h2 className="text-xl font-semibold text-neutral-800 mb-6 font-serif">
+              卦象信息
+            </h2>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+              <div>
+                <h3 className="text-lg font-medium text-neutral-700 mb-2">卦名</h3>
+                <p className="text-2xl font-bold text-primary-600">示例卦</p>
+              </div>
+              
+              <div>
+                <h3 className="text-lg font-medium text-neutral-700 mb-2">卦象</h3>
+                <p className="text-4xl">☰</p>
+              </div>
+            </div>
+            
+            <div className="mb-6">
+              <h3 className="text-lg font-medium text-neutral-700 mb-3">爻象</h3>
               <div className="space-y-2">
-                {result.yaoDetails.map((detail: YaoDetail) => (
-                  <div key={detail.yao.position} className="flex items-center">
-                    <div className="w-8 text-gray-500">{detail.yao.position}</div>
-                    <div className="flex-1">
-                      {detail.yao.type === 'old_yang' || detail.yao.type === 'young_yang' ? (
-                        <div className="w-24 h-2 bg-gray-800 rounded" />
-                      ) : (
-                        <div className="flex space-x-2">
-                          <div className="w-10 h-2 bg-gray-800 rounded" />
-                          <div className="w-10 h-2 bg-gray-800 rounded" />
-                        </div>
-                      )}
-                    </div>
-                    <div className="w-16 text-center font-mono">
-                      {detail.yao.symbol}
-                    </div>
-                    <div className="w-16 text-center">{detail.diZhi}</div>
-                    <div className="w-16 text-center">{detail.liuQin}</div>
-                    <div className="w-16 text-center">{detail.liuShen}</div>
-                    {detail.isShiYao && (
-                      <div className="w-8 text-center text-red-500 font-bold">世</div>
-                    )}
-                    {detail.isYingYao && (
-                      <div className="w-8 text-center text-blue-500 font-bold">应</div>
-                    )}
-                  </div>
+                {yaoArray.map((yao, index) => (
+                  <YaoLine key={index} yao={yao} index={index} />
                 ))}
               </div>
             </div>
             
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">卦辞</h3>
-              <p className="text-gray-600 mb-4">{result.guaData.guaCi}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div>
+                <h3 className="text-lg font-medium text-neutral-700 mb-2">地支</h3>
+                <div className="flex flex-wrap gap-2">
+                  {['子', '丑', '寅', '卯', '辰', '巳'].map((dizhi, index) => (
+                    <span key={index} className="px-3 py-1 bg-neutral-100 rounded-full text-sm">
+                      {dizhi}
+                    </span>
+                  ))}
+                </div>
+              </div>
               
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">爻辞</h3>
-              <ul className="space-y-2">
-                {result.guaData.yaoCi.map((ci: string, index: number) => (
-                  <li key={index} className="text-gray-600 text-sm">{ci}</li>
-                ))}
-              </ul>
+              <div>
+                <h3 className="text-lg font-medium text-neutral-700 mb-2">六亲</h3>
+                <div className="flex flex-wrap gap-2">
+                  {['父母', '兄弟', '子孙', '妻财', '官鬼', '兄弟'].map((liuqin, index) => (
+                    <span key={index} className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm">
+                      {liuqin}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              
+              <div>
+                <h3 className="text-lg font-medium text-neutral-700 mb-2">六神</h3>
+                <div className="flex flex-wrap gap-2">
+                  {['青龙', '朱雀', '勾陈', '螣蛇', '白虎', '玄武'].map((liushen, index) => (
+                    <span key={index} className="px-3 py-1 bg-secondary-100 text-secondary-700 rounded-full text-sm">
+                      {liushen}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              
+              <div>
+                <h3 className="text-lg font-medium text-neutral-700 mb-2">世应</h3>
+                <div className="flex space-x-4">
+                  <div className="text-center">
+                    <p className="text-sm text-neutral-600">世</p>
+                    <p className="text-xl font-bold text-accent-600">1</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm text-neutral-600">应</p>
+                    <p className="text-xl font-bold text-accent-600">4</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <div className="flex justify-center">
-          <button
-            onClick={handleConfirm}
-            className="py-3 px-6 rounded-lg font-semibold bg-blue-500 text-white hover:bg-blue-600 shadow-md hover:shadow-lg transition-all"
-          >
-            确认排卦结果
-          </button>
+          
+          <div className="text-center animate-slide-up">
+            <button
+              onClick={handleComplete}
+              className="btn btn-secondary"
+            >
+              继续解卦
+            </button>
+          </div>
         </div>
       </div>
     </div>
