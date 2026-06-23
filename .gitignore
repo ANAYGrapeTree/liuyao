@@ -27,6 +27,8 @@ Thumbs.db
 
 # Skills目录（如果存在）
 skills/
+claude-code/
+github-mcp-server/
 
 # 其他非源代码文件
 *.log
