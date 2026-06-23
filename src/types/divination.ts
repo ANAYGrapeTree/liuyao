@@ -12,6 +12,7 @@ export interface Yao {
   type: YaoType;
   position: number; // 1-6, 从下往上
   symbol: string; // ○, —, --, ×
+  changing?: boolean; // 是否为变爻
 }
 
 export interface DivinationState {
