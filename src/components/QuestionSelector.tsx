@@ -1,6 +1,6 @@
 // src/components/QuestionSelector.tsx
 import { useState } from 'react';
-import { QuestionCategory, QuestionSelectorState } from '../types/question';
+import type { QuestionCategory, QuestionSelectorState } from '../types/question';
 import { categories } from '../data/categories';
 import { CategoryCard } from './CategoryCard';
 import { QuestionInput } from './QuestionInput';
@@ -35,34 +35,45 @@ export function QuestionSelector({ onQuestionConfirm }: QuestionSelectorProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">六爻算命</h1>
-          <p className="text-lg text-gray-600">
-            选择您想占卜的问题类别，开始您的六爻之旅
-          </p>
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50">
+      <div className="container-responsive section">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12 animate-fade-in">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-800 mb-4 font-serif">
+              六爻算命
+            </h1>
+            <p className="text-lg sm:text-xl text-neutral-600 max-w-2xl mx-auto">
+              选择您想占卜的问题类别，开始您的六爻之旅
+            </p>
+          </div>
+          
+          <div className="grid-responsive mb-8">
+            {categories.map((category, index) => (
+              <div 
+                key={category.id} 
+                className="animate-slide-up"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <CategoryCard
+                  category={category}
+                  isSelected={state.selectedCategory?.id === category.id}
+                  onClick={handleCategoryClick}
+                />
+              </div>
+            ))}
+          </div>
+          
+          {state.showCustomInput && state.selectedCategory && (
+            <div className="animate-slide-up">
+              <QuestionInput
+                category={state.selectedCategory}
+                question={state.question}
+                onQuestionChange={handleQuestionChange}
+                onConfirm={handleConfirm}
+              />
+            </div>
+          )}
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {categories.map(category => (
-            <CategoryCard
-              key={category.id}
-              category={category}
-              isSelected={state.selectedCategory?.id === category.id}
-              onClick={handleCategoryClick}
-            />
-          ))}
-        </div>
-        
-        {state.showCustomInput && state.selectedCategory && (
-          <QuestionInput
-            category={state.selectedCategory}
-            question={state.question}
-            onQuestionChange={handleQuestionChange}
-            onConfirm={handleConfirm}
-          />
-        )}
       </div>
     </div>
   );
