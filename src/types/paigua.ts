@@ -1,5 +1,5 @@
 // src/types/paigua.ts
-import { Yao } from './divination';
+import type { Yao } from './divination';
 
 export interface GuaData {
   name: string;

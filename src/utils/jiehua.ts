@@ -1,6 +1,6 @@
 // src/utils/jiehua.ts
-import { PaiGuaResult } from '../types/paigua';
-import { JieGuaAnalysis, JieGuaResult } from '../types/jiehua';
+import type { PaiGuaResult } from '../types/paigua';
+import type { JieGuaResult } from '../types/jiehua';
 
 // 根据问题类型确定用神
 const getYongShen = (questionType: string): string => {
@@ -32,12 +32,7 @@ const analyzeYongShen = (paiguaResult: PaiGuaResult, questionType: string): stri
   }
   
   // 简化版：根据爻类型判断旺衰
-  let wangShuai = '';
-  if (yongShenYao.yao.type === 'old_yang' || yongShenYao.yao.type === 'young_yang') {
-    wangShuai = '旺';
-  } else {
-    wangShuai = '衰';
-  }
+  const wangShuai = (yongShenYao.yao.type === 'old_yang' || yongShenYao.yao.type === 'young_yang') ? '旺' : '衰';
   
   return `${yongShen}爻为${yongShenYao.yao.symbol}，处于${wangShuai}相。`;
 };

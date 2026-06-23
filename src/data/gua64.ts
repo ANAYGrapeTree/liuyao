@@ -1,5 +1,5 @@
 // src/data/gua64.ts
-import { GuaData } from '../types/paigua';
+import type { GuaData } from '../types/paigua';
 
 // 八卦数据
 export const baGua: Record<string, { symbol: string; name: string }> = {

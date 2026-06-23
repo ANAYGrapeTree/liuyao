@@ -35,7 +35,7 @@ export function AIInterpretation({ paiguaResult, question, questionType, onBack 
       
       const response = await interpretWithAI(config, request);
       setResult(response);
-    } catch (err) {
+    } catch {
       setError('解读失败，请稍后重试');
     } finally {
       setIsLoading(false);

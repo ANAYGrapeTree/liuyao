@@ -1,6 +1,6 @@
 // src/utils/paigua.ts
-import { Yao, YaoType } from '../types/divination';
-import { GuaData, YaoDetail, PaiGuaResult } from '../types/paigua';
+import type { Yao } from '../types/divination';
+import type { YaoDetail, PaiGuaResult } from '../types/paigua';
 import { getGuaData } from '../data/gua64';
 
 // 地支数据

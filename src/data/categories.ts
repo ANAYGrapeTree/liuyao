@@ -1,5 +1,5 @@
 // src/data/categories.ts
-import { QuestionCategory } from '../types/question';
+import type { QuestionCategory } from '../types/question';
 
 export const categories: QuestionCategory[] = [
   {

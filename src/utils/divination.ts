@@ -1,5 +1,5 @@
 // src/utils/divination.ts
-import { Coin, CoinSide, Yao, YaoType } from '../types/divination';
+import type { Coin, CoinSide, Yao, YaoType } from '../types/divination';
 
 // 随机生成铜钱正反面
 export const tossCoin = (): CoinSide => {

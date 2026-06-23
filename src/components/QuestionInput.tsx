@@ -1,5 +1,5 @@
 // src/components/QuestionInput.tsx
-import { QuestionCategory } from '../types/question';
+import type { QuestionCategory } from '../types/question';
 
 interface QuestionInputProps {
   category: QuestionCategory;

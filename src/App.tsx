@@ -5,9 +5,9 @@ import { Divination } from './components/Divination';
 import { PaiGua } from './components/PaiGua';
 import { JieGua } from './components/JieGua';
 import { AIInterpretation } from './components/AIInterpretation';
-import { QuestionCategory } from './types/question';
-import { Yao } from './types/divination';
-import { PaiGuaResult } from './types/paigua';
+import type { QuestionCategory } from './types/question';
+import type { Yao } from './types/divination';
+import type { PaiGuaResult } from './types/paigua';
 
 function App() {
   const [currentStep, setCurrentStep] = useState<'question' | 'divination' | 'paigua' | 'jiehua' | 'ai' | 'result'>('question');
@@ -30,10 +30,6 @@ function App() {
   const handlePaiguaComplete = (result: PaiGuaResult) => {
     setPaiguaResult(result);
     setCurrentStep('jiehua');
-  };
-
-  const handleJieGuaComplete = () => {
-    setCurrentStep('ai');
   };
 
   const handleBackToQuestion = () => {

@@ -1,5 +1,5 @@
 // src/types/ai.ts
-import { GuaData, PaiGuaResult } from './paigua';
+import type { GuaData, PaiGuaResult } from './paigua';
 
 export interface AIConfig {
   useMimoApi: boolean;

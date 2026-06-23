@@ -1,5 +1,5 @@
 // src/components/CategoryCard.tsx
-import { QuestionCategory } from '../types/question';
+import type { QuestionCategory } from '../types/question';
 
 interface CategoryCardProps {
   category: QuestionCategory;
