@@ -3,12 +3,13 @@ import { useState } from 'react';
 import { QuestionSelector } from './components/QuestionSelector';
 import { Divination } from './components/Divination';
 import { PaiGua } from './components/PaiGua';
+import { JieGua } from './components/JieGua';
 import { QuestionCategory } from './types/question';
 import { Yao } from './types/divination';
 import { PaiGuaResult } from './types/paigua';
 
 function App() {
-  const [currentStep, setCurrentStep] = useState<'question' | 'divination' | 'paigua' | 'result'>('question');
+  const [currentStep, setCurrentStep] = useState<'question' | 'divination' | 'paigua' | 'jiehua' | 'result'>('question');
   const [selectedQuestion, setSelectedQuestion] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<QuestionCategory | null>(null);
   const [divinationResult, setDivinationResult] = useState<Yao[]>([]);
@@ -27,8 +28,7 @@ function App() {
 
   const handlePaiguaComplete = (result: PaiGuaResult) => {
     setPaiguaResult(result);
-    setCurrentStep('result');
-    console.log('排卦完成:', result);
+    setCurrentStep('jiehua');
   };
 
   const handleBackToQuestion = () => {
@@ -64,16 +64,12 @@ function App() {
         />
       )}
       
-      {currentStep === 'result' && (
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">解卦结果</h2>
-            <p className="text-gray-600 mb-4">问题：{selectedQuestion}</p>
-            <p className="text-gray-600 mb-4">类别：{selectedCategory?.name}</p>
-            <p className="text-gray-600 mb-4">卦象：{paiguaResult?.guaData.name}</p>
-            <p className="text-gray-500">（解卦功能待实现）</p>
-          </div>
-        </div>
+      {currentStep === 'jiehua' && paiguaResult && selectedCategory && (
+        <JieGua
+          paiguaResult={paiguaResult}
+          questionType={selectedCategory.id}
+          onBack={handleBackToPaiGua}
+        />
       )}
     </div>
   );
