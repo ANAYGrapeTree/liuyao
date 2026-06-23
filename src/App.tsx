@@ -4,12 +4,13 @@ import { QuestionSelector } from './components/QuestionSelector';
 import { Divination } from './components/Divination';
 import { PaiGua } from './components/PaiGua';
 import { JieGua } from './components/JieGua';
+import { AIInterpretation } from './components/AIInterpretation';
 import { QuestionCategory } from './types/question';
 import { Yao } from './types/divination';
 import { PaiGuaResult } from './types/paigua';
 
 function App() {
-  const [currentStep, setCurrentStep] = useState<'question' | 'divination' | 'paigua' | 'jiehua' | 'result'>('question');
+  const [currentStep, setCurrentStep] = useState<'question' | 'divination' | 'paigua' | 'jiehua' | 'ai' | 'result'>('question');
   const [selectedQuestion, setSelectedQuestion] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<QuestionCategory | null>(null);
   const [divinationResult, setDivinationResult] = useState<Yao[]>([]);
@@ -31,6 +32,10 @@ function App() {
     setCurrentStep('jiehua');
   };
 
+  const handleJieGuaComplete = () => {
+    setCurrentStep('ai');
+  };
+
   const handleBackToQuestion = () => {
     setCurrentStep('question');
   };
@@ -41,6 +46,10 @@ function App() {
 
   const handleBackToPaiGua = () => {
     setCurrentStep('paigua');
+  };
+
+  const handleBackToJieGua = () => {
+    setCurrentStep('jiehua');
   };
 
   return (
@@ -69,6 +78,15 @@ function App() {
           paiguaResult={paiguaResult}
           questionType={selectedCategory.id}
           onBack={handleBackToPaiGua}
+        />
+      )}
+      
+      {currentStep === 'ai' && paiguaResult && selectedCategory && (
+        <AIInterpretation
+          paiguaResult={paiguaResult}
+          question={selectedQuestion}
+          questionType={selectedCategory.id}
+          onBack={handleBackToJieGua}
         />
       )}
     </div>
