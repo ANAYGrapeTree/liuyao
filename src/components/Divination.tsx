@@ -1,6 +1,6 @@
 // src/components/Divination.tsx
 import { useState } from 'react';
-import { Yao, YaoType } from '../types/divination';
+import type { Yao, YaoType } from '../types/divination';
 import { Coin } from './Coin';
 import { YaoLine } from './YaoLine';
 

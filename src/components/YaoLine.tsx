@@ -1,5 +1,5 @@
 // src/components/YaoLine.tsx
-import { Yao } from '../types/divination';
+import type { Yao } from '../types/divination';
 
 interface YaoLineProps {
   yao: Yao;
@@ -7,7 +7,7 @@ interface YaoLineProps {
 }
 
 export function YaoLine({ yao, index }: YaoLineProps) {
-  const isYang = yao.type === 'yang' || yao.type === 'old_yang' || yao.type === 'young_yang';
+  const isYang = yao.type === 'old_yang' || yao.type === 'young_yang';
   const isChanging = yao.type === 'old_yang' || yao.type === 'old_yin';
   
   return (
