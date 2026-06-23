@@ -53,42 +53,44 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {currentStep === 'question' && (
-        <QuestionSelector onQuestionConfirm={handleQuestionConfirm} />
-      )}
-      
-      {currentStep === 'divination' && (
-        <Divination
-          onDivinationComplete={handleDivinationComplete}
-          onBack={handleBackToQuestion}
-        />
-      )}
-      
-      {currentStep === 'paigua' && (
-        <PaiGua
-          yaoArray={divinationResult}
-          onBack={handleBackToDivination}
-          onComplete={handlePaiguaComplete}
-        />
-      )}
-      
-      {currentStep === 'jiehua' && paiguaResult && selectedCategory && (
-        <JieGua
-          paiguaResult={paiguaResult}
-          questionType={selectedCategory.id}
-          onBack={handleBackToPaiGua}
-        />
-      )}
-      
-      {currentStep === 'ai' && paiguaResult && selectedCategory && (
-        <AIInterpretation
-          paiguaResult={paiguaResult}
-          question={selectedQuestion}
-          questionType={selectedCategory.id}
-          onBack={handleBackToJieGua}
-        />
-      )}
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50">
+      <div className="animate-fade-in">
+        {currentStep === 'question' && (
+          <QuestionSelector onQuestionConfirm={handleQuestionConfirm} />
+        )}
+        
+        {currentStep === 'divination' && (
+          <Divination
+            onDivinationComplete={handleDivinationComplete}
+            onBack={handleBackToQuestion}
+          />
+        )}
+        
+        {currentStep === 'paigua' && (
+          <PaiGua
+            yaoArray={divinationResult}
+            onBack={handleBackToDivination}
+            onComplete={handlePaiguaComplete}
+          />
+        )}
+        
+        {currentStep === 'jiehua' && paiguaResult && selectedCategory && (
+          <JieGua
+            paiguaResult={paiguaResult}
+            questionType={selectedCategory.id}
+            onBack={handleBackToPaiGua}
+          />
+        )}
+        
+        {currentStep === 'ai' && paiguaResult && selectedCategory && (
+          <AIInterpretation
+            paiguaResult={paiguaResult}
+            question={selectedQuestion}
+            questionType={selectedCategory.id}
+            onBack={handleBackToJieGua}
+          />
+        )}
+      </div>
     </div>
   );
 }
