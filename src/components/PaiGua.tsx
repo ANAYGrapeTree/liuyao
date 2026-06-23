@@ -1,7 +1,8 @@
 // src/components/PaiGua.tsx
-import { Yao } from '../types/divination';
-import { PaiGuaResult } from '../types/paigua';
+import type { Yao } from '../types/divination';
+import type { PaiGuaResult } from '../types/paigua';
 import { YaoLine } from './YaoLine';
+import { paigua } from '../utils/paigua';
 
 interface PaiGuaProps {
   yaoArray: Yao[];
@@ -10,21 +11,11 @@ interface PaiGuaProps {
 }
 
 export function PaiGua({ yaoArray, onBack, onComplete }: PaiGuaProps) {
-  const generatePaiGuaResult = (): PaiGuaResult => {
-    return {
-      guaName: '示例卦',
-      guaSymbol: '☰',
-      yaoArray: yaoArray,
-      dizhi: ['子', '丑', '寅', '卯', '辰', '巳'],
-      liuqin: ['父母', '兄弟', '子孙', '妻财', '官鬼', '兄弟'],
-      liushen: ['青龙', '朱雀', '勾陈', '螣蛇', '白虎', '玄武'],
-      shiYing: { shi: 1, ying: 4 }
-    };
-  };
-
   const handleComplete = () => {
-    const result = generatePaiGuaResult();
-    onComplete(result);
+    const result = paigua(yaoArray);
+    if (result) {
+      onComplete(result);
+    }
   };
 
   return (
