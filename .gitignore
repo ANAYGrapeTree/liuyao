@@ -33,3 +33,7 @@ github-mcp-server/
 # 其他非源代码文件
 *.log
 *.tmp
+
+# 文档和配置
+docs/
+.github/workflows/
