@@ -102,5 +102,13 @@ export const getGuaData = (yaoArray: { type: string }[]): GuaData | null => {
     return '0';
   }).join('');
   
-  return gua64[binary] || null;
+  // 如果找不到对应的卦，返回一个默认的卦数据
+  return gua64[binary] || {
+    name: '未知卦',
+    symbol: '？？',
+    guaCi: '此卦暂无详细解释。',
+    yaoCi: ['暂无爻辞解释。'],
+    upperGua: '未知',
+    lowerGua: '未知'
+  };
 };
