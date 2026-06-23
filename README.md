@@ -1,10 +1,10 @@
-# 刘爻占卜网站
+# 六爻占卜网站
 
-一个基于 React + TypeScript + Vite 的刘爻占卜网站，提供在线占卜服务。
+一个基于 React + TypeScript + Vite 的六爻占卜网站，提供在线占卜服务。
 
 ## 功能
 
-- 刘爻占卜计算
+- 六爻占卜计算
 - 现代化用户界面
 - 响应式设计
 - 快速构建和热重载
@@ -16,38 +16,6 @@
 - **构建工具**: Vite 8
 - **样式**: Tailwind CSS 4
 - **代码检查**: ESLint
-
-## 开发
-
-### 安装依赖
-
-```bash
-npm install
-```
-
-### 启动开发服务器
-
-```bash
-npm run dev
-```
-
-### 构建生产版本
-
-```bash
-npm run build
-```
-
-### 预览生产版本
-
-```bash
-npm run preview
-```
-
-### 代码检查
-
-```bash
-npm run lint
-```
 
 ## 项目结构
 
