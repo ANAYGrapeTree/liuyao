@@ -2,6 +2,8 @@
 
 一个基于 React + TypeScript + Vite 的六爻占卜网站，提供在线占卜服务。
 
+**在线访问：** https://anaygrapetree.github.io/liuyao/
+
 ## 功能
 
 - 六爻占卜计算
