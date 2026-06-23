@@ -9,59 +9,51 @@ interface QuestionInputProps {
 }
 
 export function QuestionInput({ category, question, onQuestionChange, onConfirm }: QuestionInputProps) {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      onConfirm();
+    }
+  };
+
   return (
-    <div className="mt-8 p-6 bg-white rounded-xl shadow-md">
-      <h3 className="text-xl font-semibold text-gray-800 mb-4">
-        {category.icon} {category.name} - 请输入您的问题
-      </h3>
-      
-      <div className="mb-4">
-        <p className="text-sm text-gray-600 mb-2">您可以选择以下示例问题：</p>
-        <div className="flex flex-wrap gap-2">
-          {category.examples.map((example, index) => (
-            <button
-              key={index}
-              onClick={() => onQuestionChange(example)}
-              className={`
-                px-3 py-1 rounded-full text-sm transition-colors
-                ${question === example
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }
-              `}
-            >
-              {example}
-            </button>
-          ))}
-        </div>
+    <div className="card max-w-2xl mx-auto animate-scale-in">
+      <div className="mb-6">
+        <h3 className="text-xl font-semibold text-neutral-800 mb-2 font-serif">
+          请输入您的问题
+        </h3>
+        <p className="text-sm text-neutral-600">
+          类别：{category.name}
+        </p>
       </div>
       
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          或输入您的自定义问题：
+      <div className="mb-6">
+        <label htmlFor="question-input" className="label">
+          问题描述
         </label>
         <textarea
+          id="question-input"
+          className="input min-h-[120px] resize-none"
+          placeholder={`请输入关于${category.name}的问题...`}
           value={question}
           onChange={(e) => onQuestionChange(e.target.value)}
-          placeholder="请输入您想占卜的问题..."
-          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-          rows={3}
+          onKeyDown={handleKeyDown}
+          aria-describedby="question-help"
         />
+        <p id="question-help" className="mt-2 text-sm text-neutral-500">
+          请尽量具体地描述您的问题，以便获得更准确的解读
+        </p>
       </div>
       
-      <button
-        onClick={onConfirm}
-        disabled={!question.trim()}
-        className={`
-          w-full py-3 px-6 rounded-lg font-semibold transition-all
-          ${question.trim()
-            ? 'bg-blue-500 text-white hover:bg-blue-600 shadow-md hover:shadow-lg'
-            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-          }
-        `}
-      >
-        开始占卜
-      </button>
+      <div className="flex justify-end">
+        <button
+          onClick={onConfirm}
+          disabled={!question.trim()}
+          className="btn btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          确认问题
+        </button>
+      </div>
     </div>
   );
 }
